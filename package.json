@@ -1,0 +1,8 @@
+{
+  "name": "drift-city-server",
+  "version": "1.0.0",
+  "description": "Realtime relay server for Drift City",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
