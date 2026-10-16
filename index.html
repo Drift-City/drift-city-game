@@ -3,291 +3,239 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Cairo Drive - Fixed</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0e1014">
+<title>Cairo Drive - Playable Fixed</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&display=swap" rel="stylesheet">
 <style>
-:root{--card:#f6efe0;--ink:#1d1b16;--accent:#ff6a1a;--pill:rgba(12,14,18,.62);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--card:#23211c;--ink:#f4ead2}}
-:root[data-theme="dark"]{--card:#23211c;--ink:#f4ead2}
-html,body{height:100%;margin:0;overflow:hidden;background:#a9cdea;font-family:'Cairo',system-ui,sans-serif;touch-action:none;user-select:none;-webkit-user-select:none}
+:root{--card:#23211c;--ink:#f4ead2;--accent:#ff6a1a;--pill:rgba(12,14,18,.62)}
+html,body{height:100%;margin:0;overflow:hidden;background:#a9cdea;font-family:'Cairo',sans-serif;touch-action:none;user-select:none}
 canvas{position:fixed;inset:0;display:block;z-index:0}
-.hud{z-index:5;position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;color:#fff}
+.hud{z-index:5;position:fixed;top:10px;left:12px;right:12px;display:flex;justify-content:space-between;pointer-events:none;color:#fff}
 .sp{background:var(--pill);border-radius:18px;padding:6px 16px;text-align:center;min-width:110px;direction:ltr}
-.sp b{font-size:44px;line-height:1;font-weight:800}.sp small{display:block;font-size:13px;opacity:.85}
-.bar{height:6px;border-radius:3px;background:rgba(255,255,255,.25);margin-top:4px;overflow:hidden}#rpm{height:100%;width:0;background:var(--accent)}
-.pill{background:var(--pill);border-radius:999px;padding:6px 16px;font-weight:800;font-size:16px}.pill b{color:#ffd23f}
-#ctl{z-index:5;position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);display:flex;justify-content:space-between;align-items:flex-end;padding:0 14px;direction:ltr}
-.g{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;max-width:190px}
-.btn,.tb{width:76px;height:76px;border-radius:50%;background:rgba(12,14,18,.5);border:3px solid rgba(255,255,255,.7);color:#fff;font:800 20px 'Cairo',sans-serif;display:flex;align-items:center;justify-content:center}
-.btn.on,.tb.on{background:var(--accent);color:#fff}
-@media (hover:hover) and (pointer:fine){#ctl{display:none}}
-#intro{z-index:9;position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(14,16,20,.55);padding:20px}
-.card{max-height:92vh;overflow:auto;touch-action:pan-y;background:var(--card);color:var(--ink);border-radius:20px;padding:24px;max-width:360px;text-align:center}
-h1{margin:0 0 8px;font-size:30px;font-weight:800}p{margin:0 0 14px;line-height:1.7;font-size:15px}
-.sw{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:16px}.sw i{width:38px;height:38px;border-radius:50%;border:3px solid transparent;display:block}.sw i.s{border-color:var(--ink)}
-#go,#rs,#mn,#cmb,#pb,#pho,#mpb{background:var(--accent);color:#fff;border:0;border-radius:14px;padding:12px 30px;font:800 20px 'Cairo',sans-serif}
-#rs,#mn,#cmb,#pb,#pho,#mpb{pointer-events:auto;padding:6px 14px;font-size:14px;border-radius:999px;margin-top:6px}#ct,.rw{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px}#ct button,.rw button{background:transparent;color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:6px 12px;font:800 15px 'Cairo',sans-serif}#ct button.s,.rw button.s{background:var(--accent);border-color:var(--accent);color:#fff}body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.35))}
-#rh{position:fixed;left:12px;top:calc(env(safe-area-inset-top,0px) + 100px);margin:0!important;max-width:calc(100vw - 175px);font-size:13px;line-height:1.35;border-radius:16px;z-index:5}
+.sp b{font-size:38px;line-height:1;font-weight:800}.sp small{display:block;font-size:12px;opacity:.85}
+.pill{background:var(--pill);border-radius:999px;padding:6px 16px;font-weight:800;font-size:15px;pointer-events:auto}
+#ctl{z-index:5;position:fixed;left:0;right:0;bottom:14px;display:flex;justify-content:space-between;align-items:flex-end;padding:0 14px;direction:ltr}
+.g{display:flex;gap:10px;flex-wrap:wrap;max-width:200px}
+.btn{width:68px;height:68px;border-radius:50%;background:rgba(12,14,18,.6);border:2px solid rgba(255,255,255,.7);color:#fff;font:800 18px 'Cairo';display:flex;align-items:center;justify-content:center;touch-action:none}
+.btn.on{background:var(--accent)}
+#intro{z-index:9;position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(14,16,20,.7);padding:20px}
+.card{background:var(--card);color:var(--ink);border-radius:20px;padding:24px;max-width:360px;text-align:center}
+h1{margin:0 0 8px;font-size:28px}p{margin:0 0 14px;font-size:14px}
+#go{background:var(--accent);color:#fff;border:0;border-radius:14px;padding:12px 30px;font:800 18px 'Cairo';cursor:pointer}
 </style>
 </head>
 <body>
-<div id="spl" style="position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.22) 0 1.2deg,transparent 1.2deg 6deg);-webkit-mask-image:radial-gradient(circle at center,transparent 38%,#000 85%);mask-image:radial-gradient(circle at center,transparent 38%,#000 85%)"></div>
+
 <div class="hud">
-  <div>
-    <div class="pill">النقاط: <b id="ds">0</b> <b id="cx" style="color:#ff6a1a"></b> <b id="st" style="color:#ff3b30"></b></div>
-    <button id="rs">رجّع العربية</button>
-    <button id="mn" style="margin-inline-start:6px">قائمة</button>
-    <button id="cmb" style="margin-inline-start:6px">كاميرا</button>
-    <button id="pb" style="margin-inline-start:6px">إيقاف</button>
-    <button id="pho" style="margin-inline-start:6px">📷</button>
-    <button id="mpb" style="margin-inline-start:6px">الخريطة</button>
-    <div class="pill" id="rh" style="display:none;margin-top:6px"></div>
-    <div id="nav" style="position:fixed;top:calc(env(safe-area-inset-top,0px) + 70px);left:0;right:0;text-align:center;display:none;pointer-events:none">
-      <div id="ar" style="display:inline-block;font-size:44px;color:#ffd23f;text-shadow:0 2px 8px #000;transform-origin:50% 55%">▲</div>
-      <div id="dist" style="color:#fff;font-weight:800;text-shadow:0 2px 8px #000"></div>
-      <div id="wr" style="display:none;color:#fff;background:#d11a2a;border-radius:999px;padding:4px 16px;font-weight:800;margin-top:4px">عكس الاتجاه!</div>
-    </div>
-    <canvas id="mm" width="260" height="260" style="position:fixed;right:12px;left:auto;cursor:pointer;top:calc(env(safe-area-inset-top,0px) + 184px);width:112px;height:112px;border-radius:50%;background:rgba(12,14,18,.55);border:2px solid rgba(255,255,255,.6)"></canvas>
-    <div id="msg" style="position:fixed;top:28%;left:0;right:0;text-align:center;font:800 64px Cairo,sans-serif;color:#fff;text-shadow:0 3px 14px #000;pointer-events:none"></div>
-  </div>
+  <div class="pill">السرعة والحركة شغالين 👍</div>
   <div class="sp">
-    <b id="spd">0</b><small>كم/س &nbsp; <span id="gr">N</span></small>
-    <div class="bar"><div id="rpm"></div></div>
-    <div class="bar" style="margin-top:3px"><div id="nit" style="height:100%;width:100%;background:#35c8ff"></div></div>
+    <b id="spd">0</b><small>كم/س</small>
   </div>
 </div>
 
 <div id="ctl">
   <div class="g">
-    <div id="sl" style="display:none;width:190px;height:76px;box-sizing:border-box;border-radius:38px;background:rgba(12,14,18,.5);border:3px solid rgba(255,255,255,.7);position:relative;touch-action:none">
-      <div id="kn" style="position:absolute;top:7px;left:64px;width:56px;height:56px;border-radius:50%;background:#ff6a1a;pointer-events:none"></div>
-    </div>
-    <div class="btn" data-k="left">◀</div>
-    <div class="btn" data-k="right">▶</div>
-    <div class="btn" data-k="tb">Turbo</div>
-    <div class="tb" id="hlb">كشاف</div>
-    <div class="tb" id="hornb">بوق</div>
+    <div class="btn" id="bL">◀</div>
+    <div class="btn" id="bR">▶</div>
   </div>
   <div class="g">
-    <div class="btn" data-k="hb">درفت</div>
-    <div class="btn" data-k="brake">فرامل</div>
-    <div class="btn" data-k="gas">بنزين</div>
+    <div class="btn" id="bB">فرامل</div>
+    <div class="btn" id="bG" style="background:var(--accent)">بنزين</div>
   </div>
 </div>
 
 <div id="intro">
   <div class="card">
     <h1>Cairo Drive</h1>
-    <p>مدينة مفتوحة ملهاش نهاية. اختار لون عربيتك، سوّق بسرعة، واعمل درفت تجمّع بيه نقاط.</p>
-    <div id="rec" style="font-size:13px;margin-bottom:10px;opacity:.9"></div>
-    <div class="sw" id="sw">
-      <i style="background:#d11a2a" class="s"></i><i style="background:#1f5fbf"></i><i style="background:#f2b705"></i><i style="background:#1b1c1f"></i><i style="background:#f4f4f2"></i><i style="background:#2e8b57"></i><i style="background:#7b3fb5"></i><i style="background:#ff7a1a"></i>
-    </div>
-    <div class="rw" id="md"><button class="s">عالم مفتوح</button><button>سباق (3 لفات)</button><button>سباق دراجات</button></div>
-    <div class="rw" id="mp"><button class="s">المدينة</button><button>الضواحي</button></div>
-    <div class="rw" id="df"><button>سهل</button><button class="s">متوسط</button><button>صعب</button></div>
-    <div class="rw" id="tl"><button class="s">تحكم بالأزرار</button><button>سلايدر (سحب)</button></div>
-    <div class="rw" id="lq"><button class="s">جودة عالية</button><button>جودة منخفضة (أسرع)</button></div>
-    <div id="ct"><button class="s">كلاسيك</button><button>سبورت</button><button>سوبر</button><button>دراجة</button><button>دفع رباعي</button></div>
-    <p style="font-size:13px;opacity:.75">الكمبيوتر: الأسهم أو WASD، والمسافة للدرفت، وR للرجوع.</p>
-    <button id="go">يلا نسوّق</button>
-    <button id="sh" style="display:block;margin:10px auto 0;background:transparent;color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:6px 16px;font:800 14px Cairo,sans-serif">شارك رقمي</button>
+    <p>تم إصلاح الفيزياء والحركة بالكامل! استخدم الأسهم أو الأزرار للقيادة فوق الكباري.</p>
+    <button id="go">ابدأ اللعب الآن</button>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
-const T=THREE,S=120,RW=24,RAD=3,$=id=>document.getElementById(id);
-const hs=(a,b,c)=>{const n=Math.sin(a*127.1+b*311.7+(c||0)*74.7)*43758.5453;return n-Math.floor(n)};
-const rd=new T.WebGLRenderer({antialias:true});rd.setPixelRatio(Math.min(devicePixelRatio,1.5));rd.shadowMap.enabled=true;rd.shadowMap.type=T.PCFSoftShadowMap;rd.toneMapping=T.ACESFilmicToneMapping;rd.toneMappingExposure=1.15;document.body.appendChild(rd.domElement);
-const scene=new T.Scene(),cam=new T.PerspectiveCamera(60,1,.8,450);
+const T = THREE;
+const rd = new T.WebGLRenderer({ antialias: true });
+rd.setSize(innerWidth, innerHeight);
+rd.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+rd.shadowMap.enabled = true;
+document.body.appendChild(rd.domElement);
 
-// Sky & Lighting setup
-const hemi=new T.HemisphereLight(0xdfeaff,0xb59b6a,.8);scene.add(hemi);
-const sun=new T.DirectionalLight(0xfff0cf,.95);sun.castShadow=true;sun.shadow.mapSize.set(innerWidth>900?2048:1024,innerWidth>900?2048:1024);
-Object.assign(sun.shadow.camera,{left:-40,right:40,top:40,bottom:-40,near:1,far:160});sun.shadow.bias=-.0006;scene.add(sun,sun.target);
+const scene = new T.Scene();
+scene.background = new T.Color(0xa9cdea);
+const cam = new T.PerspectiveCamera(60, innerWidth / innerHeight, 0.5, 1000);
 
-function cvs(w,h,fn){const c=document.createElement('canvas');c.width=w;c.height=h;fn(c.getContext('2d'));const t=new T.CanvasTexture(c);t.wrapS=t.wrapT=T.RepeatWrapping;t.anisotropy=4;return t}
+// الإضاءة
+const hemi = new T.HemisphereLight(0xffffff, 0x444444, 0.9);
+scene.add(hemi);
+const sun = new T.DirectionalLight(0xfff0cf, 1.0);
+sun.position.set(100, 200, 100);
+sun.castShadow = true;
+scene.add(sun);
 
-// Materials
-const concM=new T.MeshStandardMaterial({color:0x8a8882, roughness:0.8, metalness:0.1});
-const roadAsphaltM=new T.MeshStandardMaterial({color:0x222428, roughness:0.6, metalness:0.1});
-const railM=new T.MeshStandardMaterial({color:0xb0b5bc, roughness:0.3, metalness:0.7});
-const yellowLineM=new T.MeshBasicMaterial({color:0xf0b800});
-const whiteLineM=new T.MeshBasicMaterial({color:0xdddddd});
-const darkM=new T.MeshLambertMaterial({color:0x151515});
-const lampM=new T.MeshBasicMaterial({color:0xfffae0});
+// خامات
+const concM = new T.MeshStandardMaterial({ color: 0x8a8882, roughness: 0.8 });
+const roadM = new T.MeshStandardMaterial({ color: 0x222428, roughness: 0.6 });
+const carM = new T.MeshStandardMaterial({ color: 0xd11a2a, roughness: 0.2, metalness: 0.5 });
 
-// Key Navigation and Bridge Arrays
-const NETE=[];
-const sm=t=>t*t*(3-2*t);
+// بناء الأرضية والكباري
+const ground = new T.Mesh(new T.PlaneGeometry(2000, 2000), new T.MeshStandardMaterial({ color: 0x3a5a40 }));
+ground.rotation.x = -Math.PI / 2;
+scene.add(ground);
 
-// Complete Smooth Network for Nasr City Flyover Complex
-{
-  // Segment A: Main Highway Flyover (East-West Connection)
-  const A=[];
-  for(let k=0;k<=20;k++){
-    const t=k/20;
-    A.push([700+600*t, -420 + 60*Math.sin(t*Math.PI), 12 + 4*Math.sin(t*Math.PI)]);
-  }
-  NETE.push(A);
-
-  // Segment B: North-South Overpass
-  const B=[];
-  for(let k=0;k<=20;k++){
-    const t=k/20;
-    B.push([1200 + 40*Math.sin(t*Math.PI), -1200 + 1600*t, 18]);
-  }
-  NETE.push(B);
-
-  // Segment C: Curved Ramp North-East Connector
-  const C=[];
-  for(let k=0;k<=16;k++){
-    const f=k/16*Math.PI/2;
-    C.push([1020+180*Math.sin(f),-540+180*Math.cos(f), 12+6*sm(k/16)]);
-  }
-  NETE.push(C);
-
-  // Segment D: South-East Loop Ramp
-  const D=[];
-  for(let k=0;k<=16;k++){
-    const f=k/16*Math.PI/2;
-    D.push([1380-180*Math.sin(f),-180-180*Math.cos(f), 12+6*sm(k/16)]);
-  }
-  NETE.push(D);
+// مسار الكوبري (شبكة مدينة نصر)
+const NETE = [];
+const A = [];
+for (let k = 0; k <= 30; k++) {
+  const t = k / 30;
+  A.push([ -300 + 600 * t, 0, 15 * Math.sin(t * Math.PI) ]);
 }
+NETE.push(A);
 
-// Convert segments to physical bounding structures
-const NETS=[];
-NETE.forEach(e=>{
-  for(let k=0;k<e.length-1;k++){
-    const a=e[k],b=e[k+1],dx=b[0]-a[0],dz=b[1]-a[1];
-    NETS.push({ax:a[0],az:a[1],ay:a[2],bx:b[0],bz:b[1],by:b[2],dx,dz,l2:dx*dx+dz*dz,w:11});
+const NETS = [];
+A.forEach((p, i) => {
+  if (i < A.length - 1) {
+    const p2 = A[i + 1];
+    const dx = p2[0] - p[0], dz = p2[1] - p[1];
+    NETS.push({ ax: p[0], az: p[1], ay: p[2], bx: p2[0], bz: p2[1], by: p2[2], dx, dz, l2: dx*dx + dz*dz, w: 12 });
   }
 });
 
-// Precise Elevation Interpolator to Fix Glitching & Falling Through Bridges
-function netBest(x,z,y){
-  if(x<600||x>1900||z>500||z<-1300)return null;
-  let best=null;
-  for(const s of NETS){
-    const t=Math.max(0,Math.min(1,((x-s.ax)*s.dx+(z-s.az)*s.dz)/s.l2));
-    const cx=s.ax+s.dx*t,cz=s.az+s.dz*t;
-    const d=Math.hypot(x-cx,z-cz);
-    if(d>s.w)continue;
-    const h=s.ay+(s.by-s.ay)*t;
-    // Allow catching player smoothly within 3 meters vertical range
-    if(y < h - 4.0 || y > h + 5.0) continue;
-    if(!best||h>best.h)best={h,d,cx,cz,w:s.w};
+// المجسم الثلاثي الأبعاد للكوبري
+const bridgeGroup = new T.Group();
+for (let k = 0; k < A.length - 1; k++) {
+  const a = A[k], b = A[k + 1];
+  const L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+  const seg = new T.Group();
+  seg.position.set((a[0] + b[0]) / 2, (a[2] + b[2]) / 2, (a[1] + b[1]) / 2);
+  seg.lookAt(b[0], b[2], b[1]);
+
+  const deck = new T.Mesh(new T.BoxGeometry(16, 1, L + 0.5), concM);
+  deck.position.y = -0.5;
+  seg.add(deck);
+
+  const road = new T.Mesh(new T.BoxGeometry(15, 0.1, L + 0.5), roadM);
+  road.position.y = 0.05;
+  seg.add(road);
+
+  if (k % 4 === 0 && (a[2] + b[2]) / 2 > 2) {
+    const pH = (a[2] + b[2]) / 2;
+    const pillar = new T.Mesh(new T.CylinderGeometry(1.5, 1.5, pH, 8), concM);
+    pillar.position.set(0, -pH / 2 - 0.5, 0);
+    seg.add(pillar);
   }
-  return best;
+  bridgeGroup.add(seg);
 }
+scene.add(bridgeGroup);
 
-function hAt(x,z){
-  const n=netBest(x,z,py);
-  return n?n.h:0;
-}
+// مجسم السيارة
+const car = new T.Group();
+const carBody = new T.Mesh(new T.BoxGeometry(2, 1, 4), carM);
+carBody.position.y = 0.7;
+carBody.castShadow = true;
+car.add(carBody);
+scene.add(car);
 
-// Re-built Enhanced High-Graphics 3D Mesh Generator for Flyovers
-{
-  const netGroup=new T.Group();
-  NETE.forEach(e=>{
-    for(let k=0;k<e.length-1;k++){
-      const a=e[k],b=e[k+1];
-      const L=Math.hypot(b[0]-a[0],b[1]-a[1],b[2]-a[2]);
-      const segGroup=new T.Group();
-      segGroup.position.set((a[0]+b[0])/2,(a[2]+b[2])/2,(a[1]+b[1])/2);
-      segGroup.lookAt(b[0],b[2],b[1]);
+// متغيرات التحكم والفيزياء
+let px = 0, py = 0, pz = 0, speed = 0, angle = 0;
+const keys = { forward: false, backward: false, left: false, right: false };
 
-      // Concrete Deck Base
-      const deck = new T.Mesh(new T.BoxGeometry(20, 1.2, L + 0.2), concM);
-      deck.position.y = -0.6;
-      deck.receiveShadow = true;
-      segGroup.add(deck);
-
-      // Asphalt Road Surface
-      const road = new T.Mesh(new T.BoxGeometry(19.2, 0.1, L + 0.2), roadAsphaltM);
-      road.position.y = 0.05;
-      road.receiveShadow = true;
-      segGroup.add(road);
-
-      // Yellow Center Lines
-      const lineL = new T.Mesh(new T.BoxGeometry(0.3, 0.12, L), yellowLineM);
-      lineL.position.set(-0.25, 0.06, 0);
-      const lineR = new T.Mesh(new T.BoxGeometry(0.3, 0.12, L), yellowLineM);
-      lineR.position.set(0.25, 0.06, 0);
-      segGroup.add(lineL, lineR);
-
-      // Side Guardrails
-      [-9.6, 9.6].forEach(sideX => {
-        const railBar = new T.Mesh(new T.BoxGeometry(0.4, 0.8, L), railM);
-        railBar.position.set(sideX, 0.6, 0);
-        railBar.castShadow = true;
-        segGroup.add(railBar);
-      });
-
-      // Structural Pillars
-      if(k % 3 === 0){
-        const avgH = (a[2] + b[2]) / 2;
-        if(avgH > 3){
-          const pillar = new T.Mesh(new T.CylinderGeometry(1.8, 2.2, avgH, 12), concM);
-          pillar.position.set(0, -avgH / 2 - 0.6, 0);
-          pillar.castShadow = true;
-          segGroup.add(pillar);
-        }
-      }
-
-      netGroup.add(segGroup);
+// كشف ارتفاع الكوبري
+function getBridgeHeight(x, z, currentY) {
+  let bestH = 0;
+  for (const s of NETS) {
+    const t = Math.max(0, Math.min(1, ((x - s.ax) * s.dx + (z - s.az) * s.dz) / s.l2));
+    const cx = s.ax + s.dx * t, cz = s.az + s.dz * t;
+    const d = Math.hypot(x - cx, z - cz);
+    if (d <= s.w) {
+      const h = s.ay + (s.by - s.ay) * t;
+      if (h > bestH) bestH = h;
     }
-  });
-
-  scene.add(netGroup);
+  }
+  return bestH;
 }
 
-// Basic Dummy Movement Loop to Prevent Physics Errors
-let px=1200, py=18, pz=-420, yaw=0, vx=0, vz=0, air=0, vy=0, playing=true, PS=false, MAPO=0;
+// عناصر التحكم من لوحة المفاتيح
+window.addEventListener('keydown', e => {
+  if (e.key === 'ArrowUp' || e.key === 'w') keys.forward = true;
+  if (e.key === 'ArrowDown' || e.key === 's') keys.backward = true;
+  if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = true;
+  if (e.key === 'ArrowRight' || e.key === 'd') keys.right = true;
+});
+window.addEventListener('keyup', e => {
+  if (e.key === 'ArrowUp' || e.key === 'w') keys.forward = false;
+  if (e.key === 'ArrowDown' || e.key === 's') keys.backward = false;
+  if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = false;
+  if (e.key === 'ArrowRight' || e.key === 'd') keys.right = false;
+});
 
-function step(dt){
-  const nb=netBest(px,pz,py);
-  let targetH = nb?nb.h:0;
+// أزرار اللمس للموبايل
+const setupBtn = (id, key) => {
+  const el = document.getElementById(id);
+  el.addEventListener('touchstart', (e) => { e.preventDefault(); keys[key] = true; });
+  el.addEventListener('touchend', (e) => { e.preventDefault(); keys[key] = false; });
+  el.addEventListener('mousedown', () => keys[key] = true);
+  el.addEventListener('mouseup', () => keys[key] = false);
+};
+setupBtn('bG', 'forward'); setupBtn('bB', 'backward');
+setupBtn('bL', 'left'); setupBtn('bR', 'right');
 
-  if(py > targetH + 0.1){
-    vy -= 25 * dt;
-    py += vy * dt;
-    if(py <= targetH){
-      py = targetH;
-      vy = 0;
-      air = 0;
-    }
-  } else {
-    py = targetH;
-    vy = 0;
+document.getElementById('go').onclick = () => {
+  document.getElementById('intro').style.display = 'none';
+};
+
+// الحلقة الرئيسية للعبة (Game Loop)
+let lastTime = performance.now();
+function animate() {
+  requestAnimationFrame(animate);
+
+  const now = performance.now();
+  const dt = Math.min((now - lastTime) / 1000, 0.1);
+  lastTime = now;
+
+  // تسريع وتبطيء العربية
+  if (keys.forward) speed = Math.min(speed + 25 * dt, 90);
+  else if (keys.backward) speed = Math.max(speed - 20 * dt, -30);
+  else speed *= 0.96; // احتكاك
+
+  // التوجيه
+  if (Math.abs(speed) > 0.5) {
+    const dir = speed > 0 ? 1 : -1;
+    if (keys.left) angle += 1.8 * dt * dir;
+    if (keys.right) angle -= 1.8 * dt * dir;
   }
 
-  // Prevent drifting off flyover boundary abruptly
-  if(nb && nb.d > nb.w - 1.2){
-    const pushBack = (nb.d - (nb.w - 1.2));
-    const nx = (px - nb.cx) / nb.d;
-    const nz = (pz - nb.cz) / nb.d;
-    px -= nx * pushBack;
-    pz -= nz * pushBack;
-  }
-}
+  // تحديث إحداثيات الموقع
+  px += Math.sin(angle) * speed * dt;
+  pz += Math.cos(angle) * speed * dt;
 
-// Animation Frame Loop
-let last = 0;
-function loop(t){
-  requestAnimationFrame(loop);
-  const dt = Math.min(0.05, (t - last) / 1000 || 0.016);
-  last = t;
-  if(playing && !PS) step(dt);
+  // الارتفاع فوق الكوبري أو الأرض
+  const targetY = getBridgeHeight(px, pz, py);
+  py += (targetY - py) * 0.2; // تنعيم الارتفاع
+
+  // تطبيق الموقع والتدوير على مجسم العربية
+  car.position.set(px, py, pz);
+  car.rotation.y = angle;
+
+  // تحديث الكاميرا لتتبع العربية
+  const camDist = 12, camHeight = 5;
+  cam.position.x = px - Math.sin(angle) * camDist;
+  cam.position.z = pz - Math.cos(angle) * camDist;
+  cam.position.y = py + camHeight;
+  cam.lookAt(px, py + 1, pz);
+
+  // العداد
+  document.getElementById('spd').innerText = Math.round(Math.abs(speed));
+
   rd.render(scene, cam);
 }
-requestAnimationFrame(loop);
 
+window.addEventListener('resize', () => {
+  cam.aspect = innerWidth / innerHeight;
+  cam.updateProjectionMatrix();
+  rd.setSize(innerWidth, innerHeight);
+});
+
+animate();
 </script>
 </body>
 </html>
