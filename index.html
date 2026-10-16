@@ -3,239 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Cairo Drive - Playable Fixed</title>
+<title>Drift City</title><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0e1014"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&display=swap" rel="stylesheet">
 <style>
-:root{--card:#23211c;--ink:#f4ead2;--accent:#ff6a1a;--pill:rgba(12,14,18,.62)}
-html,body{height:100%;margin:0;overflow:hidden;background:#a9cdea;font-family:'Cairo',sans-serif;touch-action:none;user-select:none}
+:root{--card:#f6efe0;--ink:#1d1b16;--accent:#ff6a1a;--pill:rgba(12,14,18,.62);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--card:#23211c;--ink:#f4ead2}}
+:root[data-theme="dark"]{--card:#23211c;--ink:#f4ead2}
+html,body{height:100%;margin:0;overflow:hidden;background:#a9cdea;font-family:'Cairo',system-ui,sans-serif;touch-action:none;user-select:none;-webkit-user-select:none}
 canvas{position:fixed;inset:0;display:block;z-index:0}
-.hud{z-index:5;position:fixed;top:10px;left:12px;right:12px;display:flex;justify-content:space-between;pointer-events:none;color:#fff}
+.hud{z-index:5;position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;color:#fff}
 .sp{background:var(--pill);border-radius:18px;padding:6px 16px;text-align:center;min-width:110px;direction:ltr}
-.sp b{font-size:38px;line-height:1;font-weight:800}.sp small{display:block;font-size:12px;opacity:.85}
-.pill{background:var(--pill);border-radius:999px;padding:6px 16px;font-weight:800;font-size:15px;pointer-events:auto}
-#ctl{z-index:5;position:fixed;left:0;right:0;bottom:14px;display:flex;justify-content:space-between;align-items:flex-end;padding:0 14px;direction:ltr}
-.g{display:flex;gap:10px;flex-wrap:wrap;max-width:200px}
-.btn{width:68px;height:68px;border-radius:50%;background:rgba(12,14,18,.6);border:2px solid rgba(255,255,255,.7);color:#fff;font:800 18px 'Cairo';display:flex;align-items:center;justify-content:center;touch-action:none}
-.btn.on{background:var(--accent)}
-#intro{z-index:9;position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(14,16,20,.7);padding:20px}
-.card{background:var(--card);color:var(--ink);border-radius:20px;padding:24px;max-width:360px;text-align:center}
-h1{margin:0 0 8px;font-size:28px}p{margin:0 0 14px;font-size:14px}
-#go{background:var(--accent);color:#fff;border:0;border-radius:14px;padding:12px 30px;font:800 18px 'Cairo';cursor:pointer}
+.sp b{font-size:44px;line-height:1;font-weight:800}.sp small{display:block;font-size:13px;opacity:.85}
+.bar{height:6px;border-radius:3px;background:rgba(255,255,255,.25);margin-top:4px;overflow:hidden}#rpm{height:100%;width:0;background:var(--accent)}
+.pill{background:var(--pill);border-radius:999px;padding:6px 16px;font-weight:800;font-size:16px}.pill b{color:#ffd23f}
+#ctl{z-index:5;position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);display:flex;justify-content:space-between;align-items:flex-end;padding:0 14px;direction:ltr}
+.g{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;max-width:190px}
+.btn,.tb{width:76px;height:76px;border-radius:50%;background:rgba(12,14,18,.5);border:3px solid rgba(255,255,255,.7);color:#fff;font:800 20px 'Cairo',sans-serif;display:flex;align-items:center;justify-content:center}
+.btn.on,.tb.on{background:var(--accent);color:#fff}
+@media (hover:hover) and (pointer:fine){#ctl{display:none}}
+#intro{z-index:9;position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(14,16,20,.55);padding:20px}
+.card{max-height:92vh;overflow:auto;touch-action:pan-y;background:var(--card);color:var(--ink);border-radius:20px;padding:24px;max-width:360px;text-align:center}
+h1{margin:0 0 8px;font-size:30px;font-weight:800}p{margin:0 0 14px;line-height:1.7;font-size:15px}
+.sw{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:16px}.sw i{width:38px;height:38px;border-radius:50%;border:3px solid transparent;display:block}.sw i.s{border-color:var(--ink)}
+#go,#rs,#mn,#cmb,#pb,#pho{background:var(--accent);color:#fff;border:0;border-radius:14px;padding:12px 30px;font:800 20px 'Cairo',sans-serif}
+#rs,#mn,#cmb,#pb,#pho{pointer-events:auto;padding:6px 14px;font-size:14px;border-radius:999px;margin-top:6px}#ct,.rw{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px}#ct button,.rw button{background:transparent;color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:6px 12px;font:800 15px 'Cairo',sans-serif}#ct button.s,.rw button.s{background:var(--accent);border-color:var(--accent);color:#fff}body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.35))}
 </style>
 </head>
 <body>
-
-<div class="hud">
-  <div class="pill">السرعة والحركة شغالين 👍</div>
-  <div class="sp">
-    <b id="spd">0</b><small>كم/س</small>
-  </div>
-</div>
-
-<div id="ctl">
-  <div class="g">
-    <div class="btn" id="bL">◀</div>
-    <div class="btn" id="bR">▶</div>
-  </div>
-  <div class="g">
-    <div class="btn" id="bB">فرامل</div>
-    <div class="btn" id="bG" style="background:var(--accent)">بنزين</div>
-  </div>
-</div>
-
-<div id="intro">
-  <div class="card">
-    <h1>Cairo Drive</h1>
-    <p>تم إصلاح الفيزياء والحركة بالكامل! استخدم الأسهم أو الأزرار للقيادة فوق الكباري.</p>
-    <button id="go">ابدأ اللعب الآن</button>
-  </div>
-</div>
-
+<div id="spl" style="position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.22) 0 1.2deg,transparent 1.2deg 6deg);-webkit-mask-image:radial-gradient(circle at center,transparent 38%,#000 85%);mask-image:radial-gradient(circle at center,transparent 38%,#000 85%)"></div><div class="hud"><div><div class="pill">النقاط: <b id="ds">0</b> <b id="cx" style="color:#ff6a1a"></b> <b id="st" style="color:#ff3b30"></b></div><button id="rs">رجّع العربية</button><button id="mn" style="margin-inline-start:6px">قائمة</button><button id="cmb" style="margin-inline-start:6px">كاميرا</button><button id="pb" style="margin-inline-start:6px">إيقاف</button><button id="pho" style="margin-inline-start:6px">📷</button><div class="pill" id="rh" style="display:none;margin-top:6px"></div><div id="nav" style="position:fixed;top:calc(env(safe-area-inset-top,0px) + 70px);left:0;right:0;text-align:center;display:none;pointer-events:none"><div id="ar" style="display:inline-block;font-size:44px;color:#ffd23f;text-shadow:0 2px 8px #000;transform-origin:50% 55%">▲</div><div id="dist" style="color:#fff;font-weight:800;text-shadow:0 2px 8px #000"></div><div id="wr" style="display:none;color:#fff;background:#d11a2a;border-radius:999px;padding:4px 16px;font-weight:800;margin-top:4px">عكس الاتجاه!</div></div><canvas id="mm" width="260" height="260" style="position:fixed;right:12px;top:calc(env(safe-area-inset-top,0px) + 126px);width:130px;height:130px;border-radius:50%;background:rgba(12,14,18,.55);border:2px solid rgba(255,255,255,.6)"></canvas><div id="msg" style="position:fixed;top:28%;left:0;right:0;text-align:center;font:800 64px Cairo,sans-serif;color:#fff;text-shadow:0 3px 14px #000;pointer-events:none"></div></div>
+<div class="sp"><b id="spd">0</b><small>كم/س &nbsp; <span id="gr">N</span></small><div class="bar"><div id="rpm"></div></div><div class="bar" style="margin-top:3px"><div id="nit" style="height:100%;width:100%;background:#35c8ff"></div></div></div></div>
+<div id="ctl"><div class="g"><div id="sl" style="display:none;width:190px;height:76px;box-sizing:border-box;border-radius:38px;background:rgba(12,14,18,.5);border:3px solid rgba(255,255,255,.7);position:relative;touch-action:none"><div id="kn" style="position:absolute;top:7px;left:64px;width:56px;height:56px;border-radius:50%;background:#ff6a1a;pointer-events:none"></div></div><div class="btn" data-k="left">◀</div><div class="btn" data-k="right">▶</div><div class="btn" data-k="tb">Turbo</div><div class="tb" id="hlb">كشاف</div><div class="tb" id="hornb">بوق</div></div>
+<div class="g"><div class="btn" data-k="hb">درفت</div><div class="btn" data-k="brake">فرامل</div><div class="btn" data-k="gas">بنزين</div></div></div>
+<div id="intro"><div class="card"><h1>Drift City</h1><p>مدينة مفتوحة ملهاش نهاية. اختار لون عربيتك، سوّق بسرعة، واعمل درفت تجمّع بيه نقاط.</p>
+<div id="rec" style="font-size:13px;margin-bottom:10px;opacity:.9"></div><div class="sw" id="sw"><i style="background:#d11a2a" class="s"></i><i style="background:#1f5fbf"></i><i style="background:#f2b705"></i><i style="background:#1b1c1f"></i><i style="background:#f4f4f2"></i><i style="background:#2e8b57"></i><i style="background:#7b3fb5"></i><i style="background:#ff7a1a"></i></div>
+<div class="rw" id="md"><button class="s">عالم مفتوح</button><button>سباق (3 لفات)</button><button>سباق دراجات</button></div><div class="rw" id="mp"><button class="s">المدينة</button><button>الضواحي</button></div><div class="rw" id="df"><button>سهل</button><button class="s">متوسط</button><button>صعب</button></div><div class="rw" id="tl"><button class="s">تحكم بالأزرار</button><button>سلايدر (سحب)</button></div><div class="rw" id="lq"><button class="s">جودة عالية</button><button>جودة منخفضة (أسرع)</button></div><div id="ct"><button class="s">كلاسيك</button><button>سبورت</button><button>سوبر</button><button>دراجة</button><button>دفع رباعي</button></div><p style="font-size:13px;opacity:.75">الكمبيوتر: الأسهم أو WASD، والمسافة للدرفت، وR للرجوع. الموبايل: الأزرار.</p><button id="go">يلا نسوّق</button><button id="sh" style="display:block;margin:10px auto 0;background:transparent;color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:6px 16px;font:800 14px Cairo,sans-serif">شارك رقمي</button></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
-const T = THREE;
-const rd = new T.WebGLRenderer({ antialias: true });
-rd.setSize(innerWidth, innerHeight);
-rd.setPixelRatio(Math.min(devicePixelRatio, 1.5));
-rd.shadowMap.enabled = true;
-document.body.appendChild(rd.domElement);
-
-const scene = new T.Scene();
-scene.background = new T.Color(0xa9cdea);
-const cam = new T.PerspectiveCamera(60, innerWidth / innerHeight, 0.5, 1000);
-
-// الإضاءة
-const hemi = new T.HemisphereLight(0xffffff, 0x444444, 0.9);
-scene.add(hemi);
-const sun = new T.DirectionalLight(0xfff0cf, 1.0);
-sun.position.set(100, 200, 100);
-sun.castShadow = true;
-scene.add(sun);
-
-// خامات
-const concM = new T.MeshStandardMaterial({ color: 0x8a8882, roughness: 0.8 });
-const roadM = new T.MeshStandardMaterial({ color: 0x222428, roughness: 0.6 });
-const carM = new T.MeshStandardMaterial({ color: 0xd11a2a, roughness: 0.2, metalness: 0.5 });
-
-// بناء الأرضية والكباري
-const ground = new T.Mesh(new T.PlaneGeometry(2000, 2000), new T.MeshStandardMaterial({ color: 0x3a5a40 }));
-ground.rotation.x = -Math.PI / 2;
-scene.add(ground);
-
-// مسار الكوبري (شبكة مدينة نصر)
-const NETE = [];
-const A = [];
-for (let k = 0; k <= 30; k++) {
-  const t = k / 30;
-  A.push([ -300 + 600 * t, 0, 15 * Math.sin(t * Math.PI) ]);
-}
-NETE.push(A);
-
-const NETS = [];
-A.forEach((p, i) => {
-  if (i < A.length - 1) {
-    const p2 = A[i + 1];
-    const dx = p2[0] - p[0], dz = p2[1] - p[1];
-    NETS.push({ ax: p[0], az: p[1], ay: p[2], bx: p2[0], bz: p2[1], by: p2[2], dx, dz, l2: dx*dx + dz*dz, w: 12 });
-  }
-});
-
-// المجسم الثلاثي الأبعاد للكوبري
-const bridgeGroup = new T.Group();
-for (let k = 0; k < A.length - 1; k++) {
-  const a = A[k], b = A[k + 1];
-  const L = Math.hypot(b[0] - a[0], b[1] - a[1]);
-  const seg = new T.Group();
-  seg.position.set((a[0] + b[0]) / 2, (a[2] + b[2]) / 2, (a[1] + b[1]) / 2);
-  seg.lookAt(b[0], b[2], b[1]);
-
-  const deck = new T.Mesh(new T.BoxGeometry(16, 1, L + 0.5), concM);
-  deck.position.y = -0.5;
-  seg.add(deck);
-
-  const road = new T.Mesh(new T.BoxGeometry(15, 0.1, L + 0.5), roadM);
-  road.position.y = 0.05;
-  seg.add(road);
-
-  if (k % 4 === 0 && (a[2] + b[2]) / 2 > 2) {
-    const pH = (a[2] + b[2]) / 2;
-    const pillar = new T.Mesh(new T.CylinderGeometry(1.5, 1.5, pH, 8), concM);
-    pillar.position.set(0, -pH / 2 - 0.5, 0);
-    seg.add(pillar);
-  }
-  bridgeGroup.add(seg);
-}
-scene.add(bridgeGroup);
-
-// مجسم السيارة
-const car = new T.Group();
-const carBody = new T.Mesh(new T.BoxGeometry(2, 1, 4), carM);
-carBody.position.y = 0.7;
-carBody.castShadow = true;
-car.add(carBody);
-scene.add(car);
-
-// متغيرات التحكم والفيزياء
-let px = 0, py = 0, pz = 0, speed = 0, angle = 0;
-const keys = { forward: false, backward: false, left: false, right: false };
-
-// كشف ارتفاع الكوبري
-function getBridgeHeight(x, z, currentY) {
-  let bestH = 0;
-  for (const s of NETS) {
-    const t = Math.max(0, Math.min(1, ((x - s.ax) * s.dx + (z - s.az) * s.dz) / s.l2));
-    const cx = s.ax + s.dx * t, cz = s.az + s.dz * t;
-    const d = Math.hypot(x - cx, z - cz);
-    if (d <= s.w) {
-      const h = s.ay + (s.by - s.ay) * t;
-      if (h > bestH) bestH = h;
-    }
-  }
-  return bestH;
-}
-
-// عناصر التحكم من لوحة المفاتيح
-window.addEventListener('keydown', e => {
-  if (e.key === 'ArrowUp' || e.key === 'w') keys.forward = true;
-  if (e.key === 'ArrowDown' || e.key === 's') keys.backward = true;
-  if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = true;
-  if (e.key === 'ArrowRight' || e.key === 'd') keys.right = true;
-});
-window.addEventListener('keyup', e => {
-  if (e.key === 'ArrowUp' || e.key === 'w') keys.forward = false;
-  if (e.key === 'ArrowDown' || e.key === 's') keys.backward = false;
-  if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = false;
-  if (e.key === 'ArrowRight' || e.key === 'd') keys.right = false;
-});
-
-// أزرار اللمس للموبايل
-const setupBtn = (id, key) => {
-  const el = document.getElementById(id);
-  el.addEventListener('touchstart', (e) => { e.preventDefault(); keys[key] = true; });
-  el.addEventListener('touchend', (e) => { e.preventDefault(); keys[key] = false; });
-  el.addEventListener('mousedown', () => keys[key] = true);
-  el.addEventListener('mouseup', () => keys[key] = false);
-};
-setupBtn('bG', 'forward'); setupBtn('bB', 'backward');
-setupBtn('bL', 'left'); setupBtn('bR', 'right');
-
-document.getElementById('go').onclick = () => {
-  document.getElementById('intro').style.display = 'none';
-};
-
-// الحلقة الرئيسية للعبة (Game Loop)
-let lastTime = performance.now();
-function animate() {
-  requestAnimationFrame(animate);
-
-  const now = performance.now();
-  const dt = Math.min((now - lastTime) / 1000, 0.1);
-  lastTime = now;
-
-  // تسريع وتبطيء العربية
-  if (keys.forward) speed = Math.min(speed + 25 * dt, 90);
-  else if (keys.backward) speed = Math.max(speed - 20 * dt, -30);
-  else speed *= 0.96; // احتكاك
-
-  // التوجيه
-  if (Math.abs(speed) > 0.5) {
-    const dir = speed > 0 ? 1 : -1;
-    if (keys.left) angle += 1.8 * dt * dir;
-    if (keys.right) angle -= 1.8 * dt * dir;
-  }
-
-  // تحديث إحداثيات الموقع
-  px += Math.sin(angle) * speed * dt;
-  pz += Math.cos(angle) * speed * dt;
-
-  // الارتفاع فوق الكوبري أو الأرض
-  const targetY = getBridgeHeight(px, pz, py);
-  py += (targetY - py) * 0.2; // تنعيم الارتفاع
-
-  // تطبيق الموقع والتدوير على مجسم العربية
-  car.position.set(px, py, pz);
-  car.rotation.y = angle;
-
-  // تحديث الكاميرا لتتبع العربية
-  const camDist = 12, camHeight = 5;
-  cam.position.x = px - Math.sin(angle) * camDist;
-  cam.position.z = pz - Math.cos(angle) * camDist;
-  cam.position.y = py + camHeight;
-  cam.lookAt(px, py + 1, pz);
-
-  // العداد
-  document.getElementById('spd').innerText = Math.round(Math.abs(speed));
-
-  rd.render(scene, cam);
-}
-
-window.addEventListener('resize', () => {
-  cam.aspect = innerWidth / innerHeight;
-  cam.updateProjectionMatrix();
-  rd.setSize(innerWidth, innerHeight);
-});
-
-animate();
-</script>
-</body>
-</html>
+const T=THREE,S=120,RW=24,RAD=3,$=id=>document.getElementById(id);
+const hs=(a,b,c)=>{const n=Math.sin(a*127.1+b*311.7+(c||0)*74.7)*43758.5453;return n-Math.floor(n)};
+const rd=new T.WebGLRenderer({antialias:true});rd.setPixelRatio(Math.min(devicePixelRatio,1.5));rd.shadowMap.enabled=true;rd.shadowMap.type=T.PCFSoftShadowMap;rd.toneMapping=T.ACESFilmicToneMapping;rd.toneMappingExposure=1.1;document.body.appendChild(rd.domElement);
+const scene=new T.Scene(),cam=new T.PerspectiveCamera(60,1,.8,450);
+const sc=document.createElement('canvas');sc.width=2;sc.height=256;
+{const g=sc.getContext('2d'),gr=g.createLinearGradient(0,0,0,256);gr.addColorStop(0,'#4c84c6');gr.addColorStop(.6,'#a9cdea');gr.addColorStop(1,'#f3e3c0');g.fillStyle=gr;g.fillRect(0,0,2,256)}
+const skyT=new T.CanvasTexture(sc),sg=sc.getContext('2d');scene.background=skyT;scene.fog=new T.Fog(0xe6dcc0,130,400);
+const hemi=new T.HemisphereLight(0xdfeaff,0xb59b6a,.8);scene.add(hemi);
+const sun=new T.DirectionalLight(0xfff0cf,.95);sun.castShadow=true;sun.shadow.mapSize.set(innerWidth>900?2048:1024,innerWidth>900?2048:1024);
+Object.assign(sun.shadow.camera,{left:-40,right:40,top:40,bottom:-40,near:1,far:160});sun.shadow.bias=-.0006;scene.add(sun,sun.target);
+const gT=cvs(128,128,g=>{g.fillStyle='#d6c699';g.fillRect(0,0,128,128);for(let i=0;i<1400;i++){g.fillStyle=`rgba(${Math.random()<.5?90:255},${Math.random()<.5?70:240},50,.07)`;g.fillRect(Math.random()*128,Math.random()*128,2,2)}});gT.repeat.set(300,300);const ground=new T.Mesh(new T.PlaneGeometry(2400,2400),new T.MeshLambertMaterial({map:gT}));ground.rotation.x=-Math.PI/2;scene.add(ground);
+function cvs(w,h,fn){const c=document.createElement('canvas');c.width=w;c.height=h;fn(c.getContext('2d'));const t=new T.CanvasTexture(c);t.wrapS=t.wrapT=T.RepeatWrapping;t.anisotropy=4;return t}
+const roadTex=cvs(128,256,g=>{g.fillStyle='#3a3c41';g.fillRect(0,0,128,256);for(let i=0;i<900;i++){g.fillStyle=`rgba(${Math.random()<.5?255:0},${Math.random()<.5?255:0},${Math.random()<.5?255:0},.05)`;g.fillRect(Math.random()*128,Math.random()*256,2,2)}
+g.fillStyle='#e8e8e0';g.fillRect(6,0,3,256);g.fillRect(119,0,3,256);g.fillStyle='#f2c230';g.fillRect(62,0,4,128);g.fillStyle='rgba(0,0,0,.14)';g.fillRect(28,0,14,256);g.fillRect(86,0,14,256);for(let i=0;i<14;i++){g.strokeStyle='rgba(0,0,0,.35)';g.lineWidth=1;g.beginPath();let x=Math.random()*128,y=Math.random()*256;g.moveTo(x,y);for(let k=0;k<5;k++){x+=Math.random()*14-7;y+=Math.random()*16;g.lineTo(x,y)}g.stroke()}});roadTex.repeat.set(1,S/16);
+const roadMat=new T.MeshLambertMaterial({map:roadTex}),roadGeo=new T.PlaneGeometry(RW,S);
+const winTex=cvs(128,128,g=>{g.fillStyle='#fff';g.fillRect(0,0,128,128);for(let i=0;i<500;i++){g.fillStyle=`rgba(0,0,0,${Math.random()*.06})`;g.fillRect(Math.random()*128,Math.random()*128,3,3)}for(let a=0;a<4;a++)for(let b=0;b<4;b++){const x=a*32,y=b*32,gr=g.createLinearGradient(0,y+6,0,y+24);gr.addColorStop(0,'#8fa9c4');gr.addColorStop(1,'#2f3b4a');g.fillStyle='#e9e6df';g.fillRect(x+5,y+5,22,20);g.fillStyle=gr;g.fillRect(x+7,y+7,18,16);g.fillStyle='#d8d4cb';g.fillRect(x+4,y+25,24,3);g.fillStyle='rgba(0,0,0,.18)';g.fillRect(x+15,y+7,1.5,16)}g.fillStyle='rgba(0,0,0,.12)';g.fillRect(0,0,128,2)});const unitG=new T.BoxGeometry(1,1,1),roofM=new T.MeshLambertMaterial({color:0x8d8a84}),slabG=new T.BoxGeometry(S-RW,.25,S-RW),pavT=cvs(64,64,g=>{g.fillStyle='#b9b3a4';g.fillRect(0,0,64,64);g.strokeStyle='rgba(0,0,0,.25)';g.lineWidth=2;g.strokeRect(0,0,64,64)});pavT.repeat.set(24,24);const slabM=new T.MeshLambertMaterial({map:pavT});
+const winEm=cvs(128,128,g=>{g.fillStyle='#000';g.fillRect(0,0,128,128);const cl=['#ffd48a','#ffe9b8','#bcd6ff','#ffbf6b'];for(let a=0;a<4;a++)for(let b=0;b<4;b++)if(Math.random()<.55){g.fillStyle=cl[Math.floor(Math.random()*4)];g.fillRect(a*32+7,b*32+7,18,16)}}),poleG=new T.CylinderGeometry(.15,.2,8,5),lampG=new T.SphereGeometry(.7,8,6),lampM=new T.MeshBasicMaterial({color:0x222222});const pal=['#d9c7a0','#c2a27a','#9fb0b8','#e3d5b8','#b88d70','#8aa39b','#cfc3a6','#a7a39a','#e8c9a0','#b5c7a8','#c9a0a0','#9fb7d1'];
+const bm=pal.map(c=>{const s=new T.MeshLambertMaterial({color:c,map:winTex,emissiveMap:winEm,emissive:0x000000}),r=new T.MeshLambertMaterial({color:new T.Color(c).multiplyScalar(.7)});return[s,s,r,r,s,s]});
+const parkMat=new T.MeshLambertMaterial({color:0x8fae6a}),trunkG=new T.CylinderGeometry(.35,.5,8,6),trunkM=new T.MeshLambertMaterial({color:0x8a6a45}),leafG=new T.SphereGeometry(3,7,5),leafM=new T.MeshLambertMaterial({color:0x4e8a3e}),parkG=new T.PlaneGeometry(44,44);
+const chunks=new Map();
+function mk(i,j){
+ const g=new T.Group(),rects=[],geos=[];
+ const v=new T.Mesh(roadGeo,roadMat);v.rotation.x=-Math.PI/2;v.position.set(i*S,.1,j*S+S/2);v.receiveShadow=true;g.add(v);
+ const hz=new T.Group();hz.rotation.y=Math.PI/2;hz.position.set(i*S+S/2,.12,j*S);const m2=new T.Mesh(roadGeo,roadMat);m2.rotation.x=-Math.PI/2;m2.receiveShadow=true;if(((i%4)+4)%4===3&&!MAP.rc)mkBridge(g,i,j);else{hz.add(m2);g.add(hz)}const TH=Math.floor(hs(i+MAP.sd,j,41)*4),RU=!!MAP.ru,tp=[],ramps=[],DC=!MAP.ru&&!MAP.rc,DS=DC?dstOf(i,j):-1,RING=DC&&((j%9)+9)%9===5,dthr=DS<0?0:[.2,-.25,-.1,.3,0,.05,.25,.15][DS],dhm=DS<0?1:[1.35,.7,.4,.55,1,.8,1.9,.85][DS],RC=!!MAP.rc||DS===4,RV=!RC&&((i%4)+4)%4===3,LM=RV||RU||RC?null:LMK[i+','+j],sl=new T.Mesh(RV?waterG:RC?slabG2:slabG,RV?waterM:RC?grassM:slabM);sl.position.set(i*S+S/2,RV?.04:.125,j*S+S/2);sl.receiveShadow=true;if(RV)sl.rotation.x=-Math.PI/2;sl.visible=!RU||RV;g.add(sl);if(LM)mkLM(g,LM,i*S+S/2,j*S+S/2,rects);streetFx(g,i,j,rects,RV||RC||DS===3,RU);if(RC)raceFx(g,i,j,RING);if(RING)mkRing(g,i,j);if(false){if(hs(i,j,80)<.25){const rz=j*S+S*(.3+.4*hs(i,j,82)),rm=new T.Mesh(rampG,rampM);rm.position.set(i*S,.1,rz);g.add(rm);ramps.push([i*S,rz,4,7,0])}if(hs(i,j,81)<.25){const rx=i*S+S*(.3+.4*hs(i,j,83)),rm=new T.Mesh(rampG,rampM);rm.rotation.y=Math.PI/2;rm.position.set(rx,.1,j*S);g.add(rm);ramps.push([rx,j*S,7,4,1])}}if(hs(i,j,42)<.3&&!RV&&!RU&&!RC){const md=new T.Mesh(medG,medM);md.position.set(i*S,.3,j*S+S/2);g.add(md);rects.push([i*S-1,i*S+1,j*S+16,(j+1)*S-16,1])}if(!RU||RV){if(RC&&RING&&[0,9].includes(((i%12)+12)%12)){const c=j*S+S/2;rects.push([i*S+22,(i+1)*S-22,j*S+22,c-17,1],[i*S+22,(i+1)*S-22,c+17,(j+1)*S-22,1])}else rects.push(RC?[i*S+22,(i+1)*S-22,j*S+22,(j+1)*S-22,1]:[i*S+RW/2,(i+1)*S-RW/2,j*S+RW/2,(j+1)*S-RW/2,1])}
+ for(let p=0;p<2;p++)for(let q=0;q<2;q++){
+  const a=i*2+p+MAP.sd,b=j*2+q+MAP.sd,r=hs(a,b,5),cx=i*S+RW/2+24+48*p,cz=j*S+RW/2+24+48*q;
+  if(RV||LM||RC){}else if(RU){const q2=hs(a,b,50),fm=k=>{const f=new T.Mesh(fieldG,cropM[k]);f.rotation.x=-Math.PI/2;f.position.set(cx,.07,cz);f.receiveShadow=true;g.add(f)};if(q2<.6){fm(Math.floor(hs(a,b,51)*6));if(hs(a,b,52)<.4){const cn=new T.Mesh(canalG,waterM);cn.rotation.x=-Math.PI/2;cn.position.set(cx,.09,cz-22);g.add(cn)}for(let n=0;n<3;n++)tp.push([cx-22+n*22,cz+22])}else if(q2<.85){fm(6+Math.floor(hs(a,b,53)*2));for(let n=0;n<9;n++)tp.push([cx-18+(n%3)*18+(hs(a,b,54+n)-.5)*6,cz-18+Math.floor(n/3)*18+(hs(b,a,60+n)-.5)*6])}else if(q2<.95){fm(4);const hw=8+hs(a,b,70)*4,hd=7+hs(a,b,71)*3,ho=new T.Mesh(unitG,houseM),hr=new T.Mesh(unitG,stepM);ho.scale.set(hw,5,hd);ho.position.set(cx,2.5,cz);ho.castShadow=true;hr.scale.set(hw*.5,2,hd*.5);hr.position.set(cx+hw*.2,5.9,cz);g.add(ho,hr);rects.push([cx-hw/2,cx+hw/2,cz-hd/2,cz+hd/2]);tp.push([cx+14,cz+8],[cx-14,cz-10])}}else if(r<MAP.thr+[.15,0,-.3,-.1][TH]+dthr){
+   const w=22+hs(a,b,6)*18,d=22+hs(a,b,7)*18,hh=(14+Math.pow(hs(a,b,8),2)*70)*MAP.hm*[.55,1,.8,1.7][TH]*dhm,ge=new T.BoxGeometry(w,hh,d),uv=ge.attributes.uv;
+   for(let f=0;f<6;f++)for(let k=0;k<4;k++){const n=f*4+k;uv.setXY(n,uv.getX(n)*(f<2?d:w)/12,uv.getY(n)*hh/12)}
+   geos.push(ge);const m=new T.Mesh(ge,(DS===6&&hs(a,b,44)<.5?GL6:bm[DS>=0&&PAL[DS]?PAL[DS][Math.floor(hs(a,b,9)*5)]:Math.floor(hs(a,b,9)*bm.length)]));m.position.set(cx,hh/2,cz);m.castShadow=true;g.add(m);rects.push([cx-w/2,cx+w/2,cz-d/2,cz+d/2]);const nr=1+Math.floor(hs(a,b,11)*3);for(let n=0;n<nr;n++){const rw=2+hs(a,b,12+n)*4,rh=1+hs(a,b,15+n)*2,r2=new T.Mesh(unitG,roofM);r2.scale.set(rw,rh,rw);r2.position.set(cx+(hs(a,b,18+n)-.5)*(w-8),hh+rh/2,cz+(hs(b,a,21+n)-.5)*(d-8));g.add(r2)}if(DS!==2){const sg=new T.Mesh(signG,signM[Math.floor(hs(a,b,33)*signM.length)]),sd=p===0?-1:1;sg.position.set(cx+sd*(w/2+.06),3.1,cz+(hs(a,b,34)-.5)*(d-14));sg.rotation.y=sd*Math.PI/2;g.add(sg)}if(DS===2){const rc2=new T.Mesh(coneG2,redBM);rc2.scale.set(w*.72,1,d*.72);rc2.position.set(cx,hh+1.6,cz);g.add(rc2)}if(DS!==2){const zz=hs(a,b,35)>.5?1:-1,s2=new T.Mesh(signG,signM[Math.floor(hs(a,b,43)*signM.length)]);s2.position.set(cx+(hs(a,b,36)-.5)*(w-14),3.1,cz+zz*(d/2+.06));s2.rotation.y=zz>0?0:Math.PI;g.add(s2)}if(hs(a,b,37)<.4){const sh=4+hs(a,b,38)*8,st=new T.Mesh(unitG,stepM),tk=new T.Mesh(tankG,stepM);st.scale.set(w*.55,sh,d*.55);st.position.set(cx,hh+sh/2,cz);tk.position.set(cx+(hs(a,b,39)-.5)*w*.5,hh+sh+1.1,cz+(hs(a,b,40)-.5)*d*.5);g.add(st,tk)}if(hs(a,b,31)<.14){const mx=cx+w/2-2.5,mz=cz+d/2-2.5,t1=new T.Mesh(minG,minM),t2=new T.Mesh(coneG,coneM);t1.position.set(mx,hh+11,mz);t2.position.set(mx,hh+24,mz);g.add(t1,t2)}
+  }else if(r<MAP.thr+[.15,0,-.3,-.1][TH]+dthr+.2){
+   const pk=new T.Mesh(parkG,parkMat);pk.rotation.x=-Math.PI/2;pk.position.set(cx,.27,cz);pk.receiveShadow=true;g.add(pk);
+   for(let n=0;n<4;n++){const tx=cx+(hs(a,b,n)-.5)*34,tz=cz+(hs(b,a,n+3)-.5)*34,tr=new T.Mesh(trunkG,trunkM);tr.position.set(tx,4,tz);const lf=new T.Mesh(leafG,leafM);lf.scale.y=.45;lf.position.set(tx,8.4,tz);g.add(tr,lf);rects.push([tx-.6,tx+.6,tz-.6,tz+.6])}
+  }}
+ if(!RV&&(DS===1||DS===2||DS===5)){const st2=DS===1?16:DS===2?28:22;for(let z0=j*S+24;z0<(j+1)*S-24;z0+=st2){tp.push([i*S+13.5,z0],[(i+1)*S-13.5,z0+4])}for(let x0=i*S+24;x0<(i+1)*S-24;x0+=st2){tp.push([x0,j*S+13.5],[x0+4,(j+1)*S-13.5])}}if(!RV&&DS===3)mkStalls(g,i,j,rects);if(tp.length){const mt=new T.InstancedMesh(rtrunkG,rtM,tp.length),ml=new T.InstancedMesh(rleafG,rlM,tp.length),dm=new T.Object3D();tp.forEach((q,k)=>{dm.position.set(q[0],2.5,q[1]);dm.scale.set(1,1,1);dm.updateMatrix();mt.setMatrixAt(k,dm.matrix);dm.position.y=6.2;dm.scale.set(1,.85+((k*7)%5)*.08,1);dm.updateMatrix();ml.setMatrixAt(k,dm.matrix);rects.push([q[0]-.6,q[0]+.6,q[1]-.6,q[1]+.6])});mt.frustumCulled=false;ml.frustumCulled=false;mt.castShadow=true;g.add(mt,ml)}const lx=i*S+RW/2+1.5,lz=j*S+RW/2+1.5,pl=new T.Mesh(poleG,darkM),lh=new T.Mesh(lampG,lampM);pl.position.set(lx,4,lz);lh.position.set(lx,8.2,lz);g.add(pl,lh);const lg=new T.Mesh(lgG,lgM);lg.rotation.x=-Math.PI/2;lg.position.set(lx-6,.34,lz-6);g.add(lg);rects.push([lx-.3,lx+.3,lz-.3,lz+.3]);scene.add(g);chunks.set(i+','+j,{g,rects,geos,ramps})}
+function sync(px,pz){
+ const ci=Math.floor(px/S),cj=Math.floor(pz/S);
+ {const need=[];for(let a=-RD;a<=RD;a++)for(let b=-RD;b<=RD;b++)if(a*a+b*b<=RD*RD+1&&!chunks.has((ci+a)+','+(cj+b)))need.push([a,b]);need.sort((p,q)=>p[0]*p[0]+p[1]*p[1]-q[0]*q[0]-q[1]*q[1]);const lim=chunks.size<12?99:2;need.slice(0,lim).forEach(([a,b])=>mk(ci+a,cj+b))}
+ for(const[k,c]of chunks){const[i,j]=k.split(',').map(Number);if(Math.abs(i-ci)>RD+1||Math.abs(j-cj)>RD+1){scene.remove(c.g);c.geos.forEach(x=>x.dispose());c.g.traverse(o=>{if(o.isInstancedMesh)o.dispose()});chunks.delete(k)}}}
+const bodyM=new T.MeshPhysicalMaterial({color:0xd11a2a,metalness:.55,roughness:.28,clearcoat:1,clearcoatRoughness:.06}),glassM=new T.MeshPhongMaterial({color:0x14202c,shininess:120,specular:0xaaccff}),darkM=new T.MeshLambertMaterial({color:0x151515}),rimM=new T.MeshPhongMaterial({color:0xcfd3d8,shininess:90});
+const tailM=new T.MeshBasicMaterial({color:0x8a0d14});const ec=cvs(64,64,g=>{const r=g.createLinearGradient(0,0,0,64);r.addColorStop(
